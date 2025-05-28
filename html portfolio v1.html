@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Auzemery | Food Science Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5276;
+            --secondary: #2e86c1;
+            --accent: #3498db;
+            --light: #ebf5fb;
+            --dark: #1c2833;
+            --text: #333333;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .section-title {
+            position: relative;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .skill-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .timeline-item {
+            border-left: 2px solid var(--accent);
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--accent);
+            left: -9px;
+            top: 0;
+        }
+        
+        .edit-btn {
+            background-color: var(--light);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .contact-input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        
+        .contact-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .contact-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .contact-button:hover {
+            background-color: var(--secondary);
+        }
+        
+         {
+            .edit-btn {
+                display: none;
+            }
+            
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modals for editing sections -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg p-6 w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Edit Section</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="mb-4">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                    Cancel
+                </button>
+                <button onclick="saveChanges()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-bg text-white py-20 md:py-32">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-2/3 mb-10 md:mb-0">
+                    <div class="flex justify-between items-center mb-4">
+                        <h1 id="name" class="text-4xl md:text-5xl font-bold mb-4">Lucas Auzemery</h1>
+                        <button onclick="openModal('profile')" class="edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    <h2 id="title" class="text-xl md:text-2xl mb-6">Food Science Master's Student</h2>
+                    <p id="career-objective" class="text-lg md:text-xl leading-relaxed">
+                        Bridging innovative food science with practical industry applications to contribute to the development of novel, sustainable food products. Leveraging expertise in food processing, packaging, and by-product utilization to drive innovation that reduces industry waste and improves consumer experiences. Committed to applying food engineering principles with a focus on sustainability and circular economy concepts in food production.
+                    </p>
+                </div>
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="relative">
+                        <div class="w-48 h-48 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+                            <img id="profile-image" src="https://via.placeholder.com/300x300?text=Add+Photo" alt="Lucas Auzemery" class="w-full h-full object-cover">
+                        </div>
+                        <button onclick="openModal('photo')" class="absolute bottom-0 right-0 bg-white text-primary rounded-full w-10 h-10 flex items-center justify-center shadow-lg edit-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="section-title text-3xl">Education</h2>
+                <button onclick="openModal('education')" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            <div class="space-y-8">
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Master of Food Science (Industry Practice and Innovation)</h3>
+                    <p class="text-gray-600">Murdoch University, Perth, Australia</p>
+                    <p class="text-gray-500">Expected graduation: 2026</p>
+                    <div class="mt-2">
+                        <p>Extending knowledge of food science with professional training in food safety, food engineering and food product design mentored by experienced academic and food industry leaders. Studying at Murdoch's Food Centre which is part of the Food Innovation Precinct Western Australia (FIPWA).</p>
+                        <ul class="list-disc pl-5 mt-2">
+                            <li>Food engineering and analysis of raw materials and processing effects on food product quality and nutrition</li>
+                            <li>Food safety and risk analysis in production processes</li>
+                            <li>Food product design solutions for product development, quality improvement, and shelf-life extension</li>
+                            <li>Principles of human nutrition</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Bachelor degree of Molecular Biology</h3>
+                    <p class="text-gray-600">Université of Pau et Pays de l'Adour, France</p>
+                    <p class="text-gray-500">Graduated in 2018</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Professional Development</h3>
+                    <p class="text-gray-600">University of Liege, Belgium</p>
+                    <p class="text-sm text-gray-500">Work placement</p>
+                    <div class="mt-2">
+                        <p>Completed professional development in integrations of endogenous biosensors coding for a fluorescent protein in B.subtilis</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Internship</h3>
+                    <p class="text-gray-600">LISBP Toulouse, France</p>
+                    <p class="text-sm text-gray-500">Laboratory internship</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section id="experience" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="section-title text-3xl">Work Experience</h2>
+                <button onclick="openModal('experience')" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            <div class="space-y-8">
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Food and Beverage Attendant</h3>
+                    <p class="text-gray-600">Cabin 401, Cockburn Ice Arena, Perth</p>
+                    <p class="text-gray-500">April 2025 - Present</p>
+                    <div class="mt-2">
+                        <ul class="list-disc pl-5">
+                            <li>Waitstaff duties serving customers in a fast-paced environment</li>
+                            <li>Bar attendant responsibilities including beverage preparation</li>
+                            <li>Barista role preparing coffee and specialty drinks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Bar Attendant/Cashier (Casual)</h3>
+                    <p class="text-gray-600">RAC Arena, Perth</p>
+                    <p class="text-gray-500">August 2024 - Currently</p>
+                    <div class="mt-2">
+                        <p>Catering for large events (UFC-Open cup-Music shows-Wildcats games)</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Bus Driver/Ground Person (Full time)</h3>
+                    <p class="text-gray-600">Sirrom Villages - Plutonic Gold mine</p>
+                    <p class="text-gray-500">December 2024 - February 2025</p>
+                    <div class="mt-2">
+                        <ul class="list-disc pl-5">
+                            <li>General cleaning common areas, bar attendant, pool maintenance</li>
+                            <li>Bus driving, marshal planes, load/unload planes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Bar Attendant (Casual)</h3>
+                    <p class="text-gray-600">Murdoch University Tavern, Murdoch</p>
+                    <p class="text-gray-500">August 2024 - December 2024</p>
+                    <div class="mt-2">
+                        <p>Catering for small university events from 10 to 100 hundred customers</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Road Crew Member (Casual)</h3>
+                    <p class="text-gray-600">Supalux Paints, Perth</p>
+                    <p class="text-gray-500">August 2023 - June 2024</p>
+                    <div class="mt-2">
+                        <ul class="list-disc pl-5">
+                            <li>Assist painter load/unload painting trucks</li>
+                            <li>Manage traffic on 2-way radio (pilot)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Laboratory Technician (Full time)</h3>
+                    <p class="text-gray-600">INRA, Lusignan, France</p>
+                    <p class="text-gray-500">February 2019 - August 2019</p>
+                    <div class="mt-2">
+                        <p>Conduct chemical and phytopathogen analysis on turf samples</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">Biotechnology Production Technician (Casual)</h3>
+                    <p class="text-gray-600">CEVA Biovac, Beaucouze, France</p>
+                    <p class="text-gray-500">October 2018 - February 2019</p>
+                    <div class="mt-2">
+                        <ul class="list-disc pl-5">
+                            <li>Identification, production and inactivation of various bacterias</li>
+                            <li>Maintain a sterile environment in the cleanroom</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="section-title text-3xl">Projects</h2>
+                <button onclick="openModal('projects')" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 card">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold mb-2">Crunchy Choc Protein Bar: Food Safety Plan</h3>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Food Safety</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Comprehensive food safety plan for a protein bar product</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-gray-900">Project Overview</h4>
+                            <p>Developed a cereal-based protein bar with a balance of protein, fiber, and carbohydrates, designed to meet the nutritional needs of a broad consumer base. The product contains a mix of rice syrup, dark chocolate, milk proteins, wheat proteins, fibers, and pistachios.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-gray-900">Key Features</h4>
+                            <ul class="list-disc pl-5">
+                                <li>Low water activity (Aw 0.6-0.7) for shelf stability without artificial preservatives</li>
+                                <li>pH level between 5.0-6.0 for product stability and pleasant taste</li>
+                                <li>Individually wrapped in airtight, moisture-resistant packaging</li>
+                                <li>Shelf-life of 12-18 months under proper storage conditions</li>
+                                <li>Allergen control system for milk, soy, nuts, and wheat</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-gray-900">Skills Demonstrated</h4>
+                            <ul class="list-disc pl-5">
+                                <li>Comprehensive HACCP plan development</li>
+                                <li>Hazard analysis for biological, physical, and allergen risks</li>
+                                <li>Balancing nutritional value, taste, and texture with food safety requirements</li>
+                                <li>Application of Australian food safety regulations</li>
+                                <li>Product quality management and shelf-life assessment</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <button id="add-file-btn" class="text-blue-600 hover:text-blue-800 flex items-center space-x-1">
+                                <i class="fas fa-file-upload"></i>
+                                <span>Upload Project Files</span>
+                            </button>
+                            <input type="file" id="project-file-upload" class="hidden">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Project Button -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center hover:border-blue-400 transition-colors cursor-pointer" onclick="openModal('addProject')">
+                    <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-plus text-blue-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-700">Add New Project</h3>
+                    <p class="text-sm text-gray-500 text-center mt-2">Click to add a new food science project to your portfolio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="section-title text-3xl">Skills</h2>
+                <button onclick="openModal('skills')" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Technical Skills</h3>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Food Safety (HACCP)</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Food Microbiology</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Molecular Biology Techniques</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Food Product Development</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Soft Skills</h3>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Customer Service</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>French/English Bilingual</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Adaptability</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Teamwork</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 bg-white p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-4">Certifications & Licenses</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-gray-50 p-3 rounded">
+                        <i class="fas fa-certificate text-blue-500 mr-2"></i>
+                        <span>RSA Certificate</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <i class="fas fa-certificate text-blue-500 mr-2"></i>
+                        <span>Food Handler Certificate</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <i class="fas fa-certificate text-blue-500 mr-2"></i>
+                        <span>Dangerous Goods Certificate</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <i class="fas fa-id-card text-blue-500 mr-2"></i>
+                        <span>Driving License (Manual)</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <i class="fas fa-id-card text-blue-500 mr-2"></i>
+                        <span>HRA License + PTD</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <i class="fas fa-language text-blue-500 mr-2"></i>
+                        <span>PTE Academic: Score 76 (01/2024)</span>
+                    </div>
+                </div>
+                <button class="mt-4 text-blue-600 hover:text-blue-800 flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    <span>Add Certificate</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="section-title text-3xl">Contact</h2>
+                <button onclick="openModal('contact')" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Get In Touch</h3>
+                    <p class="mb-6">I'm interested in food science opportunities, especially those focused on sustainable product development and innovation. If you have any questions or would like to discuss potential collaborations, feel free to reach out.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-blue-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">Email</p>
+                                <p id="contact-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f091858a959d9582899c85939183b0979d91999cde939f9d">[email&#160;protected]</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-map-marker-alt text-blue-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">Location</p>
+                                <p id="contact-location">Perth, Western Australia</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                                <i class="fab fa-linkedin text-blue-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">LinkedIn</p>
+                                <a href="#" id="contact-linkedin" class="text-blue-600 hover:underline">linkedin.com/in/lucas-auzemery</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Send Me a Message</h3>
+                    <form id="contact-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 mb-2">Name</label>
+                            <input type="text" id="name" name="name" class="contact-input" placeholder="Your Name">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-gray-700 mb-2">Email</label>
+                            <input type="email" id="email" name="email" class="contact-input" placeholder="Your Email">
+                        </div>
+                        
+                        <div>
+                            <label for="subject" class="block text-gray-700 mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject" class="contact-input" placeholder="Subject">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-gray-700 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" class="contact-input" placeholder="Your Message"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="contact-button">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; 2025 Lucas Auzemery | Food Science Portfolio</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-blue-400">
+                        <i class="fab fa-linkedin text-lg"></i>
+                    </a>
+                    <a href="#" class="hover:text-blue-400">
+                        <i class="fab fa-researchgate text-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Global variables to store current section being edited
+        let currentSection = '';
+        let originalContent = {};
+        
+        // Function to open edit modal
+        function openModal(section) {
+            currentSection = section;
+            const modal = document.getElementById('editModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Set the modal title based on section
+            modalTitle.textContent = `Edit ${section.charAt(0).toUpperCase() + section.slice(1)}`;
+            
+            // Clear previous content
+            modalContent.innerHTML = '';
+            
+            // Generate content based on section
+            switch(section) {
+                case 'profile':
+                    originalContent.name = document.getElementById('name').textContent;
+                    originalContent.title = document.getElementById('title').textContent;
+                    originalContent.objective = document.getElementById('career-objective').textContent;
+                    
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-name">
+                                Name
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-name" type="text" value="${originalContent.name}">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-title">
+                                Title
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-title" type="text" value="${originalContent.title}">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-objective">
+                                Career Objective
+                            </label>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-objective" rows="6">${originalContent.objective}</textarea>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'photo':
+                    modalContent.innerHTML = `
+                        <div class="mb-4 text-center">
+                            <div class="mb-4">
+                                <img src="${document.getElementById('profile-image').src}" alt="Current profile photo" class="w-32 h-32 rounded-full mx-auto object-cover">
+                            </div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-photo">
+                                Upload New Photo
+                            </label>
+                            <input class="w-full" id="edit-photo" type="file" accept="image/*">
+                            <p class="text-xs text-gray-500 mt-2">Recommended size: 300x300 pixels</p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'education':
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-2">Edit your education entries by updating the text below:</p>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-education" rows="15">${document.querySelector('#education .space-y-8').innerHTML}</textarea>
+                            <p class="text-xs text-gray-500 mt-2">You can modify the HTML structure to add, remove, or edit education entries.</p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'experience':
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-2">Edit your work experience entries by updating the text below:</p>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-experience" rows="15">${document.querySelector('#experience .space-y-8').innerHTML}</textarea>
+                            <p class="text-xs text-gray-500 mt-2">You can modify the HTML structure to add, remove, or edit work experience entries.</p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'projects':
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-2">Edit your projects by updating the text below:</p>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-projects" rows="15">${document.querySelector('#projects .grid').innerHTML}</textarea>
+                            <p class="text-xs text-gray-500 mt-2">You can modify the HTML structure to add, remove, or edit project entries.</p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'addProject':
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="new-project-title">
+                                Project Title
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-project-title" type="text" placeholder="Enter project title">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="new-project-category">
+                                Category
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-project-category" type="text" placeholder="E.g., Food Safety, Product Development">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="new-project-description">
+                                Brief Description
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-project-description" type="text" placeholder="Short description">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="new-project-details">
+                                Project Details
+                            </label>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="new-project-details" rows="6" placeholder="Detailed information about your project"></textarea>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'skills':
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-2">Edit your skills by updating the text below:</p>
+                            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-skills" rows="15">${document.querySelector('#skills .grid').innerHTML}</textarea>
+                            <p class="text-xs text-gray-500 mt-2">You can modify the HTML structure to add, remove, or edit skill entries and percentages.</p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'contact':
+                    originalContent.email = document.getElementById('contact-email').textContent;
+                    originalContent.location = document.getElementById('contact-location').textContent;
+                    originalContent.linkedin = document.getElementById('contact-linkedin').textContent;
+                    
+                    modalContent.innerHTML = `
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-contact-email">
+                                Email
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-contact-email" type="email" value="${originalContent.email}">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-contact-location">
+                                Location
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-contact-location" type="text" value="${originalContent.location}">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-contact-linkedin">
+                                LinkedIn
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-contact-linkedin" type="text" value="${originalContent.linkedin}">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            // Show the modal
+            modal.classList.remove('hidden');
+        }
+        
+        // Function to close edit modal
+        function closeModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+        
+        // Function to save changes from modal
+        function saveChanges() {
+            switch(currentSection) {
+                case 'profile':
+                    document.getElementById('name').textContent = document.getElementById('edit-name').value;
+                    document.getElementById('title').textContent = document.getElementById('edit-title').value;
+                    document.getElementById('career-objective').textContent = document.getElementById('edit-objective').value;
+                    break;
+                    
+                case 'photo':
+                    const photoInput = document.getElementById('edit-photo');
+                    if (photoInput.files && photoInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('profile-image').src = e.target.result;
+                        }
+                        reader.readAsDataURL(photoInput.files[0]);
+                    }
+                    break;
+                    
+                case 'education':
+                    document.querySelector('#education .space-y-8').innerHTML = document.getElementById('edit-education').value;
+                    break;
+                    
+                case 'experience':
+                    document.querySelector('#experience .space-y-8').innerHTML = document.getElementById('edit-experience').value;
+                    break;
+                    
+                case 'projects':
+                    document.querySelector('#projects .grid').innerHTML = document.getElementById('edit-projects').value;
+                    break;
+                    
+                case 'addProject':
+                    const title = document.getElementById('new-project-title').value;
+                    const category = document.getElementById('new-project-category').value;
+                    const description = document.getElementById('new-project-description').value;
+                    const details = document.getElementById('new-project-details').value;
+                    
+                    if (title && category && description) {
+                        const newProject = `
+                            <div class="bg-white rounded-lg shadow-lg p-6 card">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-xl font-semibold mb-2">${title}</h3>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">${category}</span>
+                                </div>
+                                <p class="text-gray-600 mb-4">${description}</p>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">Project Details</h4>
+                                        <p>${details}</p>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <button class="text-blue-600 hover:text-blue-800 flex items-center space-x-1">
+                                            <i class="fas fa-file-upload"></i>
+                                            <span>Upload Project Files</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Insert the new project before the "Add Project" button
+                        const projectsGrid = document.querySelector('#projects .grid');
+                        const addProjectBtn = document.querySelector('#projects .border-dashed');
+                        projectsGrid.insertAdjacentHTML('afterbegin', newProject);
+                    }
+                    break;
+                    
+                case 'skills':
+                    document.querySelector('#skills .grid').innerHTML = document.getElementById('edit-skills').value;
+                    break;
+                    
+                case 'contact':
+                    document.getElementById('contact-email').textContent = document.getElementById('edit-contact-email').value;
+                    document.getElementById('contact-location').textContent = document.getElementById('edit-contact-location').value;
+                    document.getElementById('contact-linkedin').textContent = document.getElementById('edit-contact-linkedin').value;
+                    document.getElementById('contact-linkedin').href = "https://" + document.getElementById('edit-contact-linkedin').value;
+                    break;
+            }
+            
+            closeModal();
+        }
+        
+        // Handle file upload for project
+        document.addEventListener('DOMContentLoaded', function() {
+            const addFileBtn = document.getElementById('add-file-btn');
+            const fileUpload = document.getElementById('project-file-upload');
+            
+            addFileBtn.addEventListener('click', function() {
+                fileUpload.click();
+            });
+            
+            fileUpload.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    addFileBtn.innerHTML = `
+                        <i class="fas fa-file-alt"></i>
+                        <span>${this.files[0].name}</span>
+                    `;
+                }
+            });
+            
+            // Prevent form submission
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Message sent! (This is a demo - no actual message was sent)');
+                this.reset();
+            });
+        });
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDn5L8lKA69RTqc%2BVOQpzXPEjdDKkEoPBbwU3MRDWeS5Q6mdBiXnAFuQSItD1Zo6ardEstuOxRtS0HsG9yoD0XykfksU1RwmAPUzXqFi%2BiD%2FiS4kZQadKDiGM0VLJYzXUZvwdprIq6wNAy8pP9ZzQTCt1NX%2Bj4PPPi0tgaKdDLazsIGfzLO1CSdD0hRSaYxOQzGFF6skJZfgLO6OcQn4FavXuo%2B1M3Ec0RhWziz9n6yhMx9fnA%2BFeyUAU8gktIKl%2FeFmZNBT6OqOsOWLA1It0hET%2FDZvmVpqN779yrtn45EdGO0GtgRuzlDM%2BeTfmAIibFxssxptWmwK3VED65%2F5khZkXtHV4EPlWgWEJ9stCpCyyPfLBANjR%2FXccJyG6JV48UA5Be9p%2BkIS8zLYskRiF3XNbPqnLL4kQOo5qRYFXp7fGFfQG8IH6r9TxPcJmraaD5GDEOMIOf%2FswZ22dXHIVM9Kiuj7UvM8EB634sW3Otc%2BeUf44mpkg%2Blu2Yl4SdNBo7W428hVQQv7%2Bg54cUrIh8Wo%3D";
+        window.__genspark_locale = "en-US";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDn5L8lKA69RTqc+VOQpzXPEjdDKkEoPBbwU3MRDWeS5Q6mdBiXnAFuQSItD1Zo6ardEstuOxRtS0HsG9yoD0XykfksU1RwmAPUzXqFi+iD/iS4kZQadKDiGM0VLJYzXUZvwdprIq6wNAy8pP9ZzQTCt1NX+j4PPPi0tgaKdDLazsIGfzLO1CSdD0hRSaYxOQzGFF6skJZfgLO6OcQn4FavXuo+1M3Ec0RhWziz9n6yhMx9fnA+FeyUAU8gktIKl/eFmZNBT6OqOsOWLA1It0hET/DZvmVpqN779yrtn45EdGO0GtgRuzlDM+eTfmAIibFxssxptWmwK3VED65/5khZkXtHV4EPlWgWEJ9stCpCyyPfLBANjR/XccJyG6JV48UA5Be9p+kIS8zLYskRiF3XNbPqnLL4kQOo5qRYFXp7fGFfQG8IH6r9TxPcJmraaD5GDEOMIOf/swZ22dXHIVM9Kiuj7UvM8EB634sW3Otc+eUf44mpkg+lu2Yl4SdNBo7W428hVQQv7+g54cUrIh8Wo=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
